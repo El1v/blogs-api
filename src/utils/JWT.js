@@ -10,18 +10,14 @@ const generateToken = ({ email }) => jwt.sign({ email }, TOKEN_SECRET, jwtConfig
 
 const authenticateToken = async (token) => {
   if (!token) {
-    const error = new Error('Missing auth token');
-    error.status = 401;
-    throw error;
+    return { type: 'EMPTY_TOKEN', message: 'Token not found' };
   }
 
   try {
     const decryptedData = await jwt.verify(token, TOKEN_SECRET);
     return decryptedData;
   } catch (error) {
-    const err = new Error('jwt malformed');
-    err.status = 401;
-    throw err;
+    return { type: 'INVALID_TOKEN', message: 'Expired or invalid token' };
   }
 };
 
