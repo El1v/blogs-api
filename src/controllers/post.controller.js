@@ -3,6 +3,7 @@ const {
   getAllPostsByUser, 
   getPostById, 
   updatePost, 
+  deletePost,
 } = require('../services/post.service');
 
 const { mapError } = require('../utils/errorMap');
@@ -54,9 +55,21 @@ const editPost = async (req, res) => {
   res.status(200).json(message);
 };
 
+const destroyPost = async (req, res) => {
+  const email = req.user;
+  const { id } = req.params;
+
+  const { type, message } = await deletePost(id, email);
+
+  if (type) return res.status(mapError(type)).json({ message });
+
+  res.status(204).json('');
+};
+
 module.exports = { 
   createNewPost,
   getAllPosts,
   getPostByPk,
   editPost,
+  destroyPost,
 };

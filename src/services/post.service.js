@@ -119,9 +119,24 @@ const updatePost = async (id, email, { title, content }) => {
   return { type: null, message: newPost };
 };
 
+const deletePost = async (id, email) => {
+  const data = await validateUserAuth(email, id);
+  if (data.type) return { type: data.type, message: data.message };
+
+  const post = await findOnePost(email, id);
+  if (!post) return { type: 'POST_NOT_EXISTS', message: 'Post does not exist' };
+
+  await BlogPost.destroy({
+    where: { id },
+  });
+
+  return { type: null, message: '' };
+};
+
 module.exports = { 
   createBlogPost,
   getAllPostsByUser,
   getPostById,
   updatePost,
+  deletePost,
 };
