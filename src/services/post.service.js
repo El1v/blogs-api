@@ -52,7 +52,7 @@ const getAllPostsByUser = async (email) => {
   const { dataValues } = message;
 
   const posts = await BlogPost.findAll({
-    where: { id: dataValues.id },
+    where: { userId: dataValues.id },
     include: [
       {
         model: User,
@@ -71,7 +71,39 @@ const getAllPostsByUser = async (email) => {
   return posts;
 };
 
+const findOnePost = async (email, id) => {
+    const { message } = await getUserByEmail(email);
+    const { dataValues } = message;
+
+    const post = await BlogPost.findOne({
+      where: { id, userId: dataValues.id },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', ['display_name', 'displayName'], 'email', 'image'],
+        },
+        {
+          model: Category,
+          as: 'categories',
+          through: { attributes: [] },
+        },
+        
+      ],
+    });
+
+    return post;
+};
+
+const getPostById = async (email, id) => {
+  const post = await findOnePost(email, id);
+  if (!post) return { type: 'POST_NOT_EXISTS', message: 'Post does not exist' };
+
+  return post.dataValues;
+};
+
 module.exports = { 
   createBlogPost,
   getAllPostsByUser,
+  getPostById,
 };

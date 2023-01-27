@@ -6,6 +6,7 @@ const errorMap = {
   INVALID_TOKEN: 401,
   USER_NOT_EXISTS: 404,
   CATEGORY_NOT_FOUND: 400,
+  POST_NOT_EXISTS: 404,
 };
 
 const mapError = (type) => errorMap[type] || 500;
