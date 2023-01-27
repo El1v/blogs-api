@@ -21,7 +21,13 @@ const authenticateToken = async (token) => {
   }
 };
 
+const parseJwt = async (token) => {
+  const email = await jwt.decode(token, TOKEN_SECRET);
+  return email;
+};
+
 module.exports = { 
   generateToken,
   authenticateToken,
+  parseJwt,
 };

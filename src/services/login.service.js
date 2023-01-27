@@ -14,7 +14,7 @@ const authenticate = async (email, password) => {
 
   if (!user) return { type: 'INVALID_VALUE', message: 'Invalid fields' };
 
-  const token = generateToken(email);
+  const token = generateToken({ email });
 
   return { type: null, message: token };
 };

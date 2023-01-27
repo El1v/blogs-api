@@ -14,10 +14,11 @@ const createUser = async (displayName, email, password, image) => {
 
   if (userExists) return { type: 'USER_EXISTS', message: 'User already registered' };
 
-  const newUser = User.create({ displayName, email, password, image });
+  const newUser = await User.create({ displayName, email, password, image });
   console.log('new user id:', newUser);
 
-  const token = generateToken(email);
+  console.log('email service', email);
+  const token = generateToken({ email });
   return { type: null, message: token };
 };
 
