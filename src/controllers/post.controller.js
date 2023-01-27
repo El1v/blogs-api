@@ -1,4 +1,10 @@
-const { createBlogPost, getAllPostsByUser, getPostById } = require('../services/post.service');
+const { 
+  createBlogPost, 
+  getAllPostsByUser, 
+  getPostById, 
+  updatePost, 
+} = require('../services/post.service');
+
 const { mapError } = require('../utils/errorMap');
 
 const createNewPost = async (req, res) => {
@@ -36,8 +42,21 @@ const getPostByPk = async (req, res) => {
     res.status(500).json({ message: 'Ocorreu um erro' });
   }
 };
+
+const editPost = async (req, res) => {
+  const email = req.user;
+  const { id } = req.params;
+
+  const { type, message } = await updatePost(id, email, req.body);
+
+  if (type) return res.status(mapError(type)).json({ message });
+
+  res.status(200).json(message);
+};
+
 module.exports = { 
   createNewPost,
   getAllPosts,
   getPostByPk,
+  editPost,
 };

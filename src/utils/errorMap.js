@@ -7,6 +7,7 @@ const errorMap = {
   USER_NOT_EXISTS: 404,
   CATEGORY_NOT_FOUND: 400,
   POST_NOT_EXISTS: 404,
+  UNAUTHORIZED_USER: 401,
 };
 
 const mapError = (type) => errorMap[type] || 500;

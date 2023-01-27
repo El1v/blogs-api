@@ -1,4 +1,5 @@
 const validation = require('./validations/validationsInputValues');
+const validateUserAuth = require('./validations/validateRequestUser');
 
 const { BlogPost, Category, User, PostCategory } = require('../models');
 
@@ -102,8 +103,25 @@ const getPostById = async (email, id) => {
   return post.dataValues;
 };
 
+const updatePost = async (id, email, { title, content }) => {
+  const error = validation.validateUpdatePost(title, content);
+  if (error.type) return error;
+
+  const data = await validateUserAuth(email, id);
+  if (data.type) return { type: data.type, message: data.message };
+
+   await BlogPost.update({ title, content }, {
+    where: { id },
+  });
+
+  const newPost = await findOnePost(email, id);
+
+  return { type: null, message: newPost };
+};
+
 module.exports = { 
   createBlogPost,
   getAllPostsByUser,
   getPostById,
+  updatePost,
 };
