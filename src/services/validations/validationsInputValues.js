@@ -1,4 +1,4 @@
-const { addUserSchema, idSchema } = require('./schemas');
+const { addUserSchema, idSchema, addCategorySchema } = require('./schemas');
 
 const validateId = (id) => {
   const { error } = idSchema.validate(id);
@@ -18,7 +18,15 @@ const validateNewUser = (displayName, email, password) => {
   return { type: null, message: '' };
 };
 
+const validateNewCategory = (name) => {
+  const { error } = addCategorySchema.validate(name);
+  if (error) return { type: 'INVALID_VALUE', message: '"name" is required' };
+
+  return { type: null, message: '' };
+};
+
 module.exports = {
   validateId,
   validateNewUser,
+  validateNewCategory,
 };

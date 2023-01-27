@@ -8,7 +8,10 @@ const addUserSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const addCategorySchema = Joi.string().min(1).required();
+
 module.exports = {
   idSchema,
   addUserSchema,
+  addCategorySchema,
 };
