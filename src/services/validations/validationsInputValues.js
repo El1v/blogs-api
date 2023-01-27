@@ -1,4 +1,6 @@
-const { addUserSchema, idSchema, addCategorySchema, addPostSchema, updatePostSchema } = require('./schemas');
+const { 
+  addUserSchema, idSchema, addCategorySchema, addPostSchema, updatePostSchema, 
+} = require('./schemas');
 
 const validateId = (id) => {
   const { error } = idSchema.validate(id);

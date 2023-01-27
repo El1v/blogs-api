@@ -1,4 +1,4 @@
-const { createUser, getAllUsers, getByUserId } = require('../services/user.service');
+const { createUser, getAllUsers, getByUserId, deleteUser } = require('../services/user.service');
 const { mapError } = require('../utils/errorMap');
 
 const createNewUser = async (req, res) => {
@@ -33,8 +33,19 @@ const getById = async (req, res) => {
   }
 };
 
+const destroyUser = async (req, res) => {
+  const email = req.user;
+
+  const { type, message } = await deleteUser(email);
+
+  if (type) return res.status(mapError(type)).json({ message });
+
+  res.status(204).json('');
+};
+
 module.exports = {
   createNewUser,
   getAll,
   getById,
+  destroyUser,
 };

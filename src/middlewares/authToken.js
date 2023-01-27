@@ -6,7 +6,6 @@ const authToken = async (req, res, next) => {
   const result = await authenticateToken(authorization);
   const { type, message } = result;
   if (type) return res.status(mapError(type)).json({ message });
-
   req.user = result.email;
   return next();
 };
