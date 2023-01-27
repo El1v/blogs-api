@@ -2,6 +2,8 @@ const validation = require('./validations/validationsInputValues');
 
 const { BlogPost, Category, User, PostCategory } = require('../models');
 
+const { getUserByEmail } = require('./user.service');
+
 const { parseJwt } = require('../utils/JWT');
 
 const validateInputsNewPost = async (title, content, categoryIds) => {
@@ -45,6 +47,31 @@ const createBlogPost = async (title, content, categoryIds, token) => {
   return { type: null, message: newBlogPost };
 };
 
+const getAllPostsByUser = async (email) => {
+  const { message } = await getUserByEmail(email);
+  const { dataValues } = message;
+
+  const posts = await BlogPost.findAll({
+    where: { id: dataValues.id },
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', ['display_name', 'displayName'], 'email', 'image'],
+      },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: [] },
+      },
+      
+    ],
+  });
+
+  return posts;
+};
+
 module.exports = { 
   createBlogPost,
+  getAllPostsByUser,
 };
